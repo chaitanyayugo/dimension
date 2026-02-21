@@ -112,3 +112,51 @@ p { line-height: 1.6; font-weight: 200; color: #ccc; }
 /* Dust */
 #dust-container { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
 .dust { position: absolute; background: #fff; border-radius: 50%; opacity: 0.2; }
+
+/* ... Your existing CSS for Navbar, Panels, and Sofa ... */
+
+/* --- NEW: LUXURY CONFIGURATOR UI --- */
+.configurator {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200; /* Puts it on the very top layer */
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+}
+
+.config-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0;
+}
+
+.swatch-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.swatch {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.swatch.active {
+    border-color: white;
+    transform: scale(1.2);
+}
+
+.swatch:hover {
+    transform: scale(1.1);
+}
