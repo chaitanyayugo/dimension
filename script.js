@@ -108,3 +108,38 @@ gsap.to(".progress-bar", {
     ease: "none",
     scrollTrigger: { scrub: 0.3 }
 });
+
+const buttons = document.querySelectorAll('.cta-button');
+
+buttons.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Calculate rotation based on mouse position
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 5; // Tilt intensity
+        const rotateY = (centerX - x) / 5;
+        
+        gsap.to(btn, {
+            rotateX: rotateX,
+            rotateY: rotateY,
+            scale: 1.05,
+            duration: 0.3,
+            ease: "power2.out"
+        });
+    });
+
+    btn.addEventListener('mouseleave', () => {
+        gsap.to(btn, {
+            rotateX: 0,
+            rotateY: 0,
+            scale: 1,
+            duration: 0.5,
+            ease: "elastic.out(1, 0.3)"
+        });
+    });
+});
