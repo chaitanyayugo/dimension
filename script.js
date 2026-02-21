@@ -9,7 +9,7 @@ function dismissLoader() {
     }
 }
 
-// 2. DUST GENERATOR (Enhanced)
+// 2. DUST GENERATOR
 const dustContainer = document.getElementById("dust-container");
 if (dustContainer) {
     for (let i = 0; i < 40; i++) {
@@ -27,8 +27,34 @@ if (dustContainer) {
     }
 }
 
-// 3. SOFA & TEXT AVOIDANCE LOGIC
-// This handles the sofa spinning AND pushes the text out of the way
+// 3. MATERIAL SWITCHER (New Meaningful Feature)
+// This listens for clicks on your color swatches to change the sofa "material"
+const setupConfigurator = () => {
+    const swatches = document.querySelectorAll('.swatch');
+    const sofa = document.querySelector('#animated-sofa');
+
+    swatches.forEach(swatch => {
+        swatch.addEventListener('click', () => {
+            // UI Update: Move the 'active' border
+            const currentActive = document.querySelector('.swatch.active');
+            if (currentActive) currentActive.classList.remove('active');
+            swatch.classList.add('active');
+
+            // Logic: Get the color name and apply a filter
+            const color = swatch.getAttribute('data-color');
+            
+            if (color === 'royal-gold') {
+                gsap.to(sofa, { filter: "sepia(0.6) saturate(1.8) brightness(0.9)", duration: 1 });
+            } else if (color === 'deep-velvet') {
+                gsap.to(sofa, { filter: "hue-rotate(280deg) saturate(1.2) brightness(0.7)", duration: 1 });
+            } else {
+                gsap.to(sofa, { filter: "none", duration: 1 }); // Default
+            }
+        });
+    });
+};
+
+// 4. SOFA & TEXT AVOIDANCE LOGIC (Enhanced)
 const mainTl = gsap.timeline({
     scrollTrigger: {
         trigger: ".scroll-container",
@@ -39,28 +65,29 @@ const mainTl = gsap.timeline({
 });
 
 mainTl
-    // Step 1: Sofa spins, Left-side text moves further left to avoid collision
-    .to("#animated-sofa", { rotationY: 180, scale: 1.2, x: "20%" }, "step1")
-    .to(".left-text .content-box", { x: "-80px", opacity: 1 }, "step1") 
+    // Step 1: Push Sofa Right, Move Text Left & Fade it slightly for focus
+    .addLabel("step1")
+    .to("#animated-sofa", { rotationY: 180, scale: 1.2, x: "25%" }, "step1")
+    .to(".left-text .content-box", { x: "-100px", opacity: 0.3 }, "step1") 
     
-    // Step 2: Sofa spins back, Right-side text moves further right
-    .to("#animated-sofa", { rotationY: 360, scale: 0.9, x: "-20%" }, "step2")
-    .to(".right-text .content-box", { x: "80px", opacity: 1 }, "step2") 
+    // Step 2: Push Sofa Left, Move Text Right
+    .addLabel("step2")
+    .to("#animated-sofa", { rotationY: 360, scale: 0.9, x: "-25%" }, "step2")
+    .to(".right-text .content-box", { x: "100px", opacity: 0.3 }, "step2") 
     
-    // Step 3: Final Section
+    // Step 3: Return to center for the Final Reveal
+    .addLabel("step3")
     .to("#animated-sofa", { rotationY: 540, scale: 1.1, x: "0%" }, "step3")
-    .to(".center-text .hero-box", { y: "-20px" }, "step3");
+    .to(".center-text .hero-box", { y: "-20px", opacity: 1 }, "step3");
 
 
-// 4. FIXED 3D HOVER EFFECT
+// 5. FIXED 3D HOVER EFFECT
 const setupHovers = () => {
     const btns = document.querySelectorAll('.cta-button');
-    
     btns.forEach(btn => {
         btn.addEventListener('mousemove', (e) => {
             const { clientX, clientY } = e;
             const { left, top, width, height } = btn.getBoundingClientRect();
-            
             const x = (clientX - left) / width - 0.5; 
             const y = (clientY - top) / height - 0.5;
             
@@ -76,21 +103,18 @@ const setupHovers = () => {
 
         btn.addEventListener('mouseleave', () => {
             gsap.to(btn, {
-                duration: 0.7,
-                rotateY: 0,
-                rotateX: 0,
-                scale: 1,
+                duration: 0.7, rotateY: 0, rotateX: 0, scale: 1,
                 ease: "elastic.out(1, 0.3)"
             });
         });
     });
 };
 
-// 5. INITIALIZATION
+// 6. INITIALIZATION
 window.addEventListener('load', () => {
     dismissLoader();
     setupHovers();
+    setupConfigurator(); // Merged: Now your color switcher starts with the page
 });
 
-// Backup dismiss in case load event is slow
 setTimeout(dismissLoader, 2000);
