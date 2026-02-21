@@ -35,15 +35,40 @@ const createDust = () => {
 };
 createDust();
 
-// 3. SOFA MASTER TIMELINE
+// Replace the old Sofa Master Timeline with this refined logic
 const sofaTl = gsap.timeline({
     scrollTrigger: {
         trigger: ".scroll-container",
         start: "top top",
         end: "bottom bottom",
-        scrub: 1.5, // Smoother follow
+        scrub: 1.5,
     }
 });
+
+// We define "Dodges" based on panel alignment
+// Section 1: Center (Hero)
+sofaTl.to("#animated-sofa", { rotationY: 45, x: "0%", scale: 1, duration: 1 })
+
+// Section 2: Left Text -> Sofa Dodges Right
+.to("#animated-sofa", { rotationY: 120, x: "25%", scale: 1.1, duration: 1 })
+
+// Section 3: Right Text -> Sofa Dodges Left
+.to("#animated-sofa", { rotationY: 180, x: "-25%", scale: 1.2, duration: 1 })
+
+// Section 4: Left Text -> Sofa Dodges Right
+.to("#animated-sofa", { rotationY: 240, x: "25%", scale: 1.1, duration: 1 })
+
+// Section 5: Right Text -> Sofa Dodges Left
+.to("#animated-sofa", { rotationY: 300, x: "-25%", scale: 1.5, duration: 1 })
+
+// Section 6: Left Text -> Sofa Dodges Right
+.to("#animated-sofa", { rotationY: 360, x: "25%", scale: 1.1, duration: 1 })
+
+// Section 7: Right Text -> Sofa Dodges Left
+.to("#animated-sofa", { rotationY: 450, x: "-25%", scale: 1.2, duration: 1 })
+
+// Section 8: Center (CTA) -> Return to Center
+.to("#animated-sofa", { rotationY: 720, x: "0%", scale: 1, duration: 1 });
 
 // Build the choreography
 sofaTl
